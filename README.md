@@ -8,8 +8,11 @@
 ### Option 1: Download Pre-built Executable (Recommended)
 1. Go to [Releases](https://github.com/KallosLaszlo/palia_garden/releases)
 2. Download the latest `PaliaGardenOptimizer.exe`
-3. Run it directly - no Python installation needed!
-4. Configuration is automatically saved to `%LOCALAPPDATA%\PaliaGardenOptimizer\`
+3. **Windows SmartScreen Warning**: Since the executable is not digitally signed, Windows may show a security warning
+   - Click "More info" → "Run anyway" to bypass this warning
+   - This is normal for new applications - the software is safe to run
+4. Run it directly - no Python installation needed!
+5. Configuration is automatically saved to `%LOCALAPPDATA%\PaliaGardenOptimizer\`
 
 ### Option 2: Run from Source (Development)
 ```bash
@@ -180,6 +183,33 @@ The application includes robust error handling:
 - **Lightweight**: Minimal memory footprint
 - **Efficient**: Only loads needed images and languages
 - **Scalable**: Supports gardens up to 30×30
+
+## 🔧 Troubleshooting
+
+### Windows Security Warning
+If you see "Windows protected your PC" when running `PaliaGardenOptimizer.exe`:
+
+1. **This is normal** - Windows shows this for unsigned applications
+2. Click **"More info"**
+3. Click **"Run anyway"** to start the application
+4. The software is safe - it's just not digitally signed
+
+### Alternative: Run from Source
+If you prefer not to bypass Windows warnings:
+```bash
+# Clone and run from source code instead
+git clone https://github.com/KallosLaszlo/palia_garden.git
+cd palia_garden
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python palia_garden_optimizer.py
+```
+
+### Configuration Issues
+- **Config location**: `%LOCALAPPDATA%\PaliaGardenOptimizer\palia_config.json`
+- **Reset settings**: Delete the config file to restore defaults
+- **Permissions**: Make sure the application can write to your user directory
 
 ## 🤝 Contributing
 
