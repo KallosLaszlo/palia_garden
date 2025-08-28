@@ -56,3 +56,4 @@ garden_config.json
 # Backup files
 *.bak
 *.backup
+toto.txt
