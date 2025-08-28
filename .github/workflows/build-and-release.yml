@@ -96,7 +96,7 @@ jobs:
         }
         
         echo "🚀 Running PyInstaller..."
-        pyinstaller --onefile --windowed --icon=icon.ico --version-file="$out" --name=PaliaGardenOptimizer main.py
+        pyinstaller --onefile --windowed --icon=icon.ico --version-file="$out" --name=PaliaGardenOptimizer --add-data "lang;lang" --add-data "assets;assets" --hidden-import=palia_garden_optimizer --hidden-import=garden --hidden-import=crops --hidden-import=config --hidden-import=language --hidden-import=ui_utils main.py
 
         echo "📁 Build könyvtár tartalma:"
         Get-ChildItem -Path "dist" -Recurse
