@@ -74,7 +74,8 @@ jobs:
       shell: pwsh
       run: |
         echo "🔨 Windows executable építése..."
-        pyinstaller --onefile --windowed --icon=icon.ico --name=PaliaGardenOptimizer main.py
+        python tools/write_version_info.py --tag $env:TAG_NAME --sha $env:SHA
+        pyinstaller --onefile --windowed --icon=icon.ico --version-file=version_info.py --name=PaliaGardenOptimizer main.py
 
         echo "📁 Build könyvtár tartalma:"
         Get-ChildItem -Path "dist" -Recurse
