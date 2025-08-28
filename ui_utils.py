@@ -6,8 +6,18 @@ UI utilities and components for Palia Garden Optimizer
 
 import tkinter as tk
 import os
+import sys
 from PIL import Image, ImageTk
 from crops import CROPS
+
+def get_resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 class ToolTip:
     """Create a tooltip for a given widget"""
@@ -54,13 +64,16 @@ def create_tooltip(widget, text):
 def load_crop_images(pics_folder="pics", thumbnail_size=(24, 24)):
     """Load crop images and create thumbnails"""
     images = {}
-    if not os.path.exists(pics_folder):
+    # Use resource path for bundled executable
+    pics_path = get_resource_path(pics_folder)
+    if not os.path.exists(pics_path):
+        print(f"Warning: Images folder not found at {pics_path}")
         return images
     
     for crop_name in CROPS.keys():
         # Try different extensions
         for ext in ['.webp', '.png', '.jpg', '.jpeg']:
-            image_path = os.path.join(pics_folder, f"{crop_name}{ext}")
+            image_path = os.path.join(pics_path, f"{crop_name}{ext}")
             if os.path.exists(image_path):
                 try:
                     # Load and resize image

@@ -69,8 +69,8 @@ jobs:
         Write-Host "📝 Writing simple build metadata..."
         $meta = @{ tag = $env:TAG_NAME; sha = $env:SHA } | ConvertTo-Json
         $meta | Out-File -FilePath "build_metadata.json" -Encoding utf8
-    
-    - name: Build Windows executable
+
+    - name: Build executable with PyInstaller
       shell: pwsh
       env:
         TAG_NAME: ${{ github.ref_name }}

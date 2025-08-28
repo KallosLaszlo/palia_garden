@@ -35,6 +35,14 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         
+        # Set window icon
+        try:
+            icon_path = get_resource_path("icon.ico")
+            if os.path.exists(icon_path):
+                self.iconbitmap(icon_path)
+        except Exception as e:
+            print(f"Could not load icon: {e}")
+        
         # Load saved configuration
         self.config = load_config()
         
