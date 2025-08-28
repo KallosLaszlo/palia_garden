@@ -95,8 +95,8 @@ jobs:
           exit 1
         }
         
-        echo "🚀 Running PyInstaller..."
-        pyinstaller --onefile --windowed --icon=icon.ico --version-file="$out" --name=PaliaGardenOptimizer --add-data "lang;lang" --add-data "assets;assets" --hidden-import=palia_garden_optimizer --hidden-import=garden --hidden-import=crops --hidden-import=config --hidden-import=language --hidden-import=ui_utils main.py
+        echo "🚀 Running PyInstaller with spec file..."
+        pyinstaller --clean PaliaGardenOptimizer.spec
 
         echo "📁 Build directory contents:"
         Get-ChildItem -Path "dist" -Recurse
