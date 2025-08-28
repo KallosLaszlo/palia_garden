@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 
 jobs:
-  # JSON validáció - mindig fut
+  # JSON validation - always runs
   validate-json:
     name: JSON Syntax Validation
     runs-on: ubuntu-latest
@@ -24,16 +24,16 @@ jobs:
     
     - name: Validate JSON files
       run: |
-        echo "🔍 JSON fájlok ellenőrzése..."
+        echo "🔍 Validating JSON files..."
         python validate_json.py
-        echo "✅ JSON validáció befejezve!"
+        echo "✅ JSON validation completed!"
 
-  # Windows build - csak tag esetén
+  # Windows build - only on tag push
   build-windows-release:
     name: Build Windows Release
     runs-on: windows-latest
     needs: validate-json
-    # Csak akkor fut, ha tag-et pusholtunk (pl. v1.0.0)
+    # Only run when a tag is pushed (e.g. v1.0.0)
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     
     steps:
@@ -55,7 +55,7 @@ jobs:
     
     - name: Install dependencies
       run: |
-        echo "📦 Függőségek telepítése..."
+        echo "📦 Installing dependencies..."
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pyinstaller
@@ -76,7 +76,7 @@ jobs:
         TAG_NAME: ${{ github.ref_name }}
         SHA: ${{ github.sha }}
       run: |
-        echo "🔨 Windows executable építése..."
+        echo "🔨 Building Windows executable..."
         echo "DEBUG: GITHUB_WORKSPACE = $env:GITHUB_WORKSPACE"
         echo "DEBUG: TAG_NAME = $env:TAG_NAME"
         echo "DEBUG: SHA = $env:SHA"
@@ -98,19 +98,19 @@ jobs:
         echo "🚀 Running PyInstaller..."
         pyinstaller --onefile --windowed --icon=icon.ico --version-file="$out" --name=PaliaGardenOptimizer --add-data "lang;lang" --add-data "assets;assets" --hidden-import=palia_garden_optimizer --hidden-import=garden --hidden-import=crops --hidden-import=config --hidden-import=language --hidden-import=ui_utils main.py
 
-        echo "📁 Build könyvtár tartalma:"
+        echo "📁 Build directory contents:"
         Get-ChildItem -Path "dist" -Recurse
     
     - name: Test executable
       shell: pwsh
       run: |
-        echo "🧪 Executable tesztelése..."
+        echo "🧪 Testing executable..."
         if (Test-Path "dist/PaliaGardenOptimizer.exe") {
           $fileSize = (Get-Item "dist/PaliaGardenOptimizer.exe").Length
-          echo "✅ Executable sikeresen létrehozva!"
-          echo "📊 Fájl méret: $([math]::Round($fileSize / 1MB, 2)) MB"
+          echo "✅ Executable created successfully!"
+          echo "📊 File size: $([math]::Round($fileSize / 1MB, 2)) MB"
         } else {
-          echo "❌ Executable nem található!"
+          echo "❌ Executable not found!"
           exit 1
         }
     
