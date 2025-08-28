@@ -1,0 +1,25 @@
+{
+  "language": "en",
+  "rows": 9,
+  "cols": 9,
+  "inventory": {
+    "Apple": 2,
+    "Butterfly Bean": 0,
+    "Blueberry": 2,
+    "Bok Choy": 0,
+    "Carrot": 0,
+    "Corn": 0,
+    "Cotton": 0,
+    "Lettuce": 0,
+    "Napa Cabbage": 0,
+    "Onion": 0,
+    "Potato": 0,
+    "Rice": 0,
+    "Rockhopper Pumpkin": 0,
+    "Spicy Pepper": 0,
+    "Tomato": 0,
+    "Wheat": 0
+  },
+  "preferred_plant": "Apple",
+  "optimization_mode": "balanced"
+}
