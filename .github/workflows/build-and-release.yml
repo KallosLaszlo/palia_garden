@@ -121,32 +121,32 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
       with:
         tag_name: ${{ github.ref_name }}
-        release_name: Palia Kert Optimalizáló ${{ github.ref_name }}
+        release_name: Palia Garden Optimizer ${{ github.ref_name }}
         body: |
-          🌟 **Palia Kert Optimalizáló** - Windows Kiadás ${{ github.ref_name }}
+          🌟 **Palia Garden Optimizer** - Windows Release ${{ github.ref_name }}
           
-          ## 🚀 Újdonságok ebben a verzióban
-          - Automatikus fordítás és kiadás pipeline
-          - JSON érvényesítés minden nyelvi fájlhoz
-          - Windows futtatható fájl PyInstaller-rel
-          - Többnyelvű támogatás (Magyar, Angol, Német, Spanyol, Francia)
+          ## 🚀 What's New in This Version
+          - Automated build and release pipeline
+          - JSON validation for all language files
+          - Windows executable built with PyInstaller
+          - Multi-language support (Hungarian, English, German, Spanish, French)
           
-          ## 📥 Letöltés
-          Töltsd le a `PaliaKertOptimalizalo.exe` fájlt alább és futtasd Windows-on.
+          ## 📥 Download
+          Download the `PaliaGardenOptimizer.exe` file below and run it on Windows.
           
-          ## ✨ Funkciók
-          - 🌱 Kert méret személyre szabása
-          - 🎯 Többféle optimalizációs mód (Max Pontszám, Max Bónusz, Max Termés, stb.)
-          - 📊 Növény bónusz hatások megjelenítése
-          - 🌐 Többnyelvű kezelőfelület
-          - 💡 Súgók és részletes leírások
+          ## ✨ Features
+          - 🌱 Customizable garden size configuration
+          - 🎯 Multiple optimization modes (Max Score, Max Bonus, Max Yield, etc.)
+          - 📊 Plant bonus effect visualization
+          - 🌐 Multi-language user interface
+          - 💡 Tooltips and detailed descriptions
           
-          ## 🛠️ Rendszerkövetelmények
+          ## 🛠️ System Requirements
           - Windows 10/11
-          - Nincs szükség Python telepítésre
+          - No Python installation required
           
           ---
-          *Automatikusan készült a commit alapján: ${{ github.sha }}*
+          *Automatically built from commit: ${{ github.sha }}*
         draft: false
         prerelease: false
     
@@ -157,5 +157,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: dist/PaliaGardenOptimizer.exe
-        asset_name: PaliaKertOptimalizalo.exe
+        asset_name: PaliaGardenOptimizer.exe
         asset_content_type: application/octet-stream
