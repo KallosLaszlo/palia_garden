@@ -7,11 +7,21 @@ Language management for Palia Garden Optimizer
 import os
 import json
 import glob
+import sys
+
+def get_resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 def load_languages():
     """Load all language files from the lang directory"""
     languages = {}
-    lang_dir = os.path.join(os.path.dirname(__file__), 'lang')
+    lang_dir = get_resource_path('lang')
     
     if not os.path.exists(lang_dir):
         print(f"Warning: Language directory {lang_dir} not found!")

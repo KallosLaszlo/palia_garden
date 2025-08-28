@@ -8,6 +8,18 @@ Created by: Kallós László 2025, Palia 0.194
 
 import tkinter as tk
 from tkinter import ttk, messagebox
+import sys
+import os
+
+# Resource path handling for PyInstaller
+def get_resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 # Import our modules
 from config import save_config, load_config
