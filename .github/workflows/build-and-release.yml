@@ -72,15 +72,20 @@ jobs:
     
     - name: Build Windows executable
       shell: pwsh
+      env:
+        TAG_NAME: ${{ github.ref_name }}
+        SHA: ${{ github.sha }}
       run: |
         echo "🔨 Windows executable építése..."
-        python tools/write_version_info.py --tag $env:TAG_NAME --sha $env:SHA
-        pyinstaller --onefile --windowed --icon=icon.ico --version-file=version_info.py --name=PaliaGardenOptimizer main.py
+        $out = Join-Path $env:GITHUB_WORKSPACE 'version_info.py'
+        python tools/write_version_info.py --tag $env:TAG_NAME --sha $env:SHA --out "$out"
+        pyinstaller --onefile --windowed --icon=icon.ico --version-file="$out" --name=PaliaGardenOptimizer main.py
 
         echo "📁 Build könyvtár tartalma:"
         Get-ChildItem -Path "dist" -Recurse
     
     - name: Test executable
+      shell: pwsh
       run: |
         echo "🧪 Executable tesztelése..."
         if (Test-Path "dist/PaliaGardenOptimizer.exe") {
