@@ -1,0 +1,158 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # JSON validáció - mindig fut
+  validate-json:
+    name: JSON Syntax Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Validate JSON files
+      run: |
+        echo "🔍 JSON fájlok ellenőrzése..."
+        python validate_json.py
+        echo "✅ JSON validáció befejezve!"
+
+  # Windows build - csak tag esetén
+  build-windows-release:
+    name: Build Windows Release
+    runs-on: windows-latest
+    needs: validate-json
+    # Csak akkor fut, ha tag-et pusholtunk (pl. v1.0.0)
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~\AppData\Local\pip\Cache
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        echo "📦 Függőségek telepítése..."
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Create version info file
+      run: |
+        echo "📝 Verzió info fájl létrehozása..."
+        $versionInfo = @"
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(1,0,0,0),
+    prodvers=(1,0,0,0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+  ),
+  kids=[
+    StringFileInfo(
+      [
+        StringTable(
+          u'040904B0',
+          [StringStruct(u'CompanyName', u'Palia Garden Optimizer'),
+           StringStruct(u'FileDescription', u'Palia Garden Optimizer'),
+           StringStruct(u'FileVersion', u'${{ github.ref_name }}'),
+           StringStruct(u'InternalName', u'PaliaGardenOptimizer'),
+           StringStruct(u'LegalCopyright', u'Open Source'),
+           StringStruct(u'OriginalFilename', u'PaliaGardenOptimizer.exe'),
+           StringStruct(u'ProductName', u'Palia Garden Optimizer'),
+           StringStruct(u'ProductVersion', u'${{ github.ref_name }}')])
+      ]), 
+    VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
+  ]
+)
+"@
+        $versionInfo | Out-File -FilePath "version_info.py" -Encoding utf8
+    
+    - name: Build Windows executable
+      run: |
+        echo "🔨 Windows executable építése..."
+        pyinstaller --onefile --windowed --icon=icon.ico --version-file=version_info.py --name=PaliaGardenOptimizer main.py
+        
+        echo "📁 Build könyvtár tartalma:"
+        Get-ChildItem -Path "dist" -Recurse
+    
+    - name: Test executable
+      run: |
+        echo "🧪 Executable tesztelése..."
+        if (Test-Path "dist/PaliaGardenOptimizer.exe") {
+          $fileSize = (Get-Item "dist/PaliaGardenOptimizer.exe").Length
+          echo "✅ Executable sikeresen létrehozva!"
+          echo "📊 Fájl méret: $([math]::Round($fileSize / 1MB, 2)) MB"
+        } else {
+          echo "❌ Executable nem található!"
+          exit 1
+        }
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Palia Garden Optimizer ${{ github.ref_name }}
+        body: |
+          🌟 **Palia Garden Optimizer** - Windows Release ${{ github.ref_name }}
+          
+          ## 🚀 Újdonságok ebben a verzióban
+          - Automatikus build és release pipeline
+          - JSON validáció minden nyelvű fájlhoz
+          - Windows executable PyInstaller-rel
+          - Multi-nyelv támogatás (Magyar, Angol, Német, Spanyol, Francia)
+          
+          ## 📥 Letöltés
+          Töltsd le a `PaliaGardenOptimizer.exe` fájlt alább és futtasd Windows-on.
+          
+          ## ✨ Funkciók
+          - Kert méret testreszabás
+          - Többféle optimalizációs mód (Max Pontszám, Max Bónusz, Max Termés, stb.)
+          - Növény bónusz hatások vizualizációja
+          - Többnyelvű kezelőfelület
+          - Tooltip súgók és leírások
+          
+          ---
+          *Automatikusan építve a commit-ból: ${{ github.sha }}*
+        draft: false
+        prerelease: false
+    
+    - name: Upload executable to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: dist/PaliaGardenOptimizer.exe
+        asset_name: PaliaGardenOptimizer.exe
+        asset_content_type: application/octet-stream
