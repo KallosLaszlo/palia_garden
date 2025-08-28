@@ -558,15 +558,15 @@ class App(tk.Tk):
         
         # Show effect description
         effect_names = {
-            "harvest": f"🟡 {self.get_text('harvest_boost_name', 'HARVEST BOOST')}",
-            "quality": f"🟣 {self.get_text('quality_boost_name', 'QUALITY BOOST')}", 
-            "growth": f"🟦 {self.get_text('growth_boost_name', 'GROWTH BOOST')}",
-            "water": f"💧 {self.get_text('water_boost_name', 'WATER RETAIN')}",
-            "weed": f"🌿 {self.get_text('weed_boost_name', 'WEED BLOCK')}"
+            "harvest": f"🟡 {self.get_text('harvest_boost_name')}",
+            "quality": f"🟣 {self.get_text('quality_boost_name')}", 
+            "growth": f"🟦 {self.get_text('growth_boost_name')}",
+            "water": f"💧 {self.get_text('water_boost_name')}",
+            "weed": f"🌿 {self.get_text('weed_boost_name')}"
         }
         
         localized_plant_name = self.get_crop_name(plant_name)
-        boost_text = self.get_text('boost_tooltip', 'Green: Boost | Red: Penalty')
+        boost_text = self.get_text('boost_tooltip')
         description = f"{localized_plant_name}\n{effect_names.get(effect, effect)}\n{boost_text}"
         
         # Position tooltip in top-left corner
