@@ -26,7 +26,7 @@ def main():
     # -*- coding: utf-8 -*-
     from PyInstaller.utils.win32.versioninfo import VSVersionInfo, FixedFileInfo, StringFileInfo, StringTable, StringStruct, VarFileInfo, VarStruct
 
-    VSVersionInfo(
+    version_info = VSVersionInfo(
       ffi=FixedFileInfo(
         filevers=(1,0,0,0),
         prodvers=(1,0,0,0),
@@ -58,7 +58,7 @@ def main():
         VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
       ]
     )
-    """)
+    """).strip()
 
     if sha:
         content = f"# commit: {sha}\n" + content
