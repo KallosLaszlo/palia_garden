@@ -77,8 +77,25 @@ jobs:
         SHA: ${{ github.sha }}
       run: |
         echo "🔨 Windows executable építése..."
+        echo "DEBUG: GITHUB_WORKSPACE = $env:GITHUB_WORKSPACE"
+        echo "DEBUG: TAG_NAME = $env:TAG_NAME"
+        echo "DEBUG: SHA = $env:SHA"
         $out = Join-Path $env:GITHUB_WORKSPACE 'version_info.py'
+        echo "DEBUG: version_info.py path = $out"
+        
+        echo "🛠️ Generating version_info.py..."
         python tools/write_version_info.py --tag $env:TAG_NAME --sha $env:SHA --out "$out"
+        
+        echo "🔍 Checking if version_info.py exists..."
+        if (Test-Path "$out") {
+          echo "✅ version_info.py created successfully"
+          Get-Content "$out" | Select-Object -First 5
+        } else {
+          echo "❌ version_info.py NOT found!"
+          exit 1
+        }
+        
+        echo "🚀 Running PyInstaller..."
         pyinstaller --onefile --windowed --icon=icon.ico --version-file="$out" --name=PaliaGardenOptimizer main.py
 
         echo "📁 Build könyvtár tartalma:"
