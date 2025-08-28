@@ -3,6 +3,33 @@
 **Multi-language garden planner with crop optimization for Palia**  
 *Created by: Kallós László 2025, Palia 0.194*
 
+## 🚀 Quick Start
+
+### Option 1: Download Pre-built Executable (Recommended)
+1. Go to [Releases](https://github.com/KallosLaszlo/palia_garden/releases)
+2. Download the latest `PaliaGardenOptimizer.exe`
+3. Run it directly - no Python installation needed!
+4. Configuration is automatically saved to `%LOCALAPPDATA%\PaliaGardenOptimizer\`
+
+### Option 2: Run from Source (Development)
+```bash
+# Clone the repository
+git clone https://github.com/KallosLaszlo/palia_garden.git
+cd palia_garden
+
+# Create and activate virtual environment
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+# or
+source .venv/bin/activate       # Linux/Mac
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the application
+python .venv/Scripts/python.exe palia_garden_optimizer.py
+```
+
 ## 📋 Features
 
 ### 🌍 **Multi-Language Support**
@@ -40,7 +67,7 @@ The project has been refactored into a modular structure for better maintainabil
 ```
 palia/
 ├── palia_garden_optimizer.py  # Main application
-├── config.py                  # Configuration management
+├── config.py                  # Configuration management  
 ├── crops.py                   # Crop data and constants
 ├── garden.py                  # Garden logic and optimization algorithms
 ├── language.py                # Language management system
@@ -55,17 +82,11 @@ palia/
 └── README.md                  # This file
 ```
 
-## 🚀 Quick Start
+## � Configuration Storage
 
-### Prerequisites
-```bash
-pip install tkinter pillow
-```
-
-### Running the Application
-```bash
-python palia_garden_optimizer.py
-```
+- **Windows**: Configuration is saved to `%LOCALAPPDATA%\PaliaGardenOptimizer\palia_config.json`
+- **Linux/Mac**: Configuration is saved to `~/.config/palia-garden-optimizer/palia_config.json`
+- This ensures your settings are preserved and don't interfere with the application files
 
 ## 🌍 Adding New Languages
 
